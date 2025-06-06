@@ -7,13 +7,10 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+use App\Http\Controllers\ProductController;
 
-Route::get('register-product', function () {
-    return Inertia::render('RegisterProduct');
-})->middleware(['auth', 'verified'])->name('register-product');
+Route::resource('products', ProductController::class)
+    ->middleware(['auth', 'verified']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
