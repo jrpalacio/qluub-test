@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
-import { ShoppingCart, Menu } from 'lucide-vue-next';
+import { ref, defineProps } from 'vue';
+import { ShoppingCart, Menu, X, LogIn, UserPlus } from 'lucide-vue-next';
 
+const showMobileMenu = ref(false);
 
 const props = defineProps({
     products: {
@@ -24,34 +25,59 @@ const props = defineProps({
                     :href="route('home')"
                     class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-md font-semibold leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] "
                 >
-                    QLuub
+                <img src="images/logo-qluub.png" alt="Logo QLuub" class="w-full object-contain h-12" >
+
                 </Link>
-                <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer lg:hidden dark:text-white text-[#1b1b18]">
+                <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer lg:hidden dark:text-white text-[#1b1b18]" @click="showMobileMenu = !showMobileMenu">
                     <Menu />
                 </Button>
-                <div class="lg:flex lg:items-center lg:gap-2 hidden">
-                    <Link
-                    v-if="$page.props.auth.user"
-                    :href="route('products.index')"
+                <!-- Menú móvil -->
+                <transition name="fade">
+                    <div v-if="showMobileMenu" class="fixed inset-0 z-50 bg-black/40 flex lg:hidden">
+                        <div class="bg-white dark:bg-neutral-900 w-64 h-full shadow-lg p-6 flex flex-col gap-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-xl font-bold">QLuub</span>
+                                <button @click="showMobileMenu = false" class="text-2xl font-bold text-gray-600 dark:text-gray-200"><X /></button>
+                            </div>
+                            <Link v-if="$page.props.auth.user" :href="route('products.index')" class="flex items-center gap-4 rounded px-4 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                <ShoppingCart /> Productos
+                            </Link>
+                            <template v-else>
+                                <Link :href="route('login')" class="flex items-center gap-4 rounded px-4 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                    <LogIn /> Iniciar sesión
+                                </Link>
+                                <Link :href="route('register')" class="flex items-center gap-4 rounded px-4 py-2 text-left text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-neutral-800">
+                                    <UserPlus /> Registrarse
+                                </Link>
+                            </template>
+                        </div>
+                        <div class="flex-1" @click="showMobileMenu = false"></div>
+                    </div>
+                </transition>
+        <!-- Menú escritorio -->
+        <div class="lg:flex lg:items-center lg:gap-2 hidden">
+            <Link
+            v-if="$page.props.auth.user"
+            :href="route('products.index')"
+            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
+        >
+            Productos
+            </Link>
+            <template v-else>
+                <Link
+                    :href="route('login')"
+                    class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
+                >
+                    Iniciar sesión
+                </Link>
+                <Link
+                    :href="route('register')"
                     class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                 >
-                    Productos
-                    </Link>
-                    <template v-else>
-                        <Link
-                            :href="route('login')"
-                            class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]"
-                        >
-                            Iniciar sesión
-                        </Link>
-                        <Link
-                            :href="route('register')"
-                            class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
-                        >
-                            Registrarse
-                        </Link>
-                    </template>
-                </div>
+                    Registrarse
+                </Link>
+            </template>
+        </div>
             </nav>
         </header>
         <div class="w-full max-w-6xl mx-auto mt-8">
