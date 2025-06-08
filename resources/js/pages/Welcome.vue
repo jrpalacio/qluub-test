@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    products: {
+        type: Array,
+        required: true,
+    },
+});
 </script>
 
 <template>
@@ -39,10 +47,20 @@ import { Head, Link } from '@inertiajs/vue3';
                 </template>
             </nav>
         </header>
-        <div class="border border-green-600 duration-750 starting:opacity-0 flex w-full items-center justify-center opacity-100 transition-opacity lg:grow">
-            <main class="flex w-full max-w-[335px] flex-col-reverse overflow-hidden rounded-lg lg:max-w-4xl lg:flex-row">
-                <h1 class="text-2xl font-bold text-white">QLuub</h1>
-            </main>
+        <div class="w-full max-w-6xl mx-auto mt-8">
+            <h1 class="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Productos destacados</h1>
+            <div v-if="products.length > 0" class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div v-for="product in products" :key="product.id" class="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+                    <div class="flex flex-col gap-2 items-start">
+                        <h3 class="text-lg font-semibold leading-tight text-gray-900 dark:text-white">{{ product.name }}</h3>
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ product.description }}</p>
+                        <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">Stock: {{ product.stock }}</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="flex items-center justify-center mt-12">
+                <p class="text-gray-500 text-lg">No hay productos disponibles por el momento.</p>
+            </div>
         </div>
     </div>
 </template>

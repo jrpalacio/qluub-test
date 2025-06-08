@@ -4,8 +4,13 @@ use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use App\Models\Product;
+
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    $products = Product::all();
+    return Inertia::render('Welcome', [
+        'products' => $products,
+    ]);
 })->name('home');
 
 Route::get('dashboard', function () {
