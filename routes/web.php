@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,6 +15,8 @@ Route::get('dashboard', function () {
 Route::get('register-product', function () {
     return Inertia::render('RegisterProduct');
 })->middleware(['auth', 'verified'])->name('register-product');
+
+Route::resource('products', ProductController::class);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
