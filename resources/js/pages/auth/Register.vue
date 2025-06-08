@@ -8,11 +8,17 @@ import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 
+import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+const currentUser = page.props.auth?.user || null;
+
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
+    role: 'client',
 });
 
 const submit = () => {
@@ -66,6 +72,16 @@ const submit = () => {
                         placeholder=""
                     />
                     <InputError :message="form.errors.password_confirmation" />
+                </div>
+
+                <!-- Solo mostrar el selector de rol si el usuario actual es admin -->
+                <div v-if="currentUser && currentUser.role === 'admin'" class="grid gap-2">
+                    <Label for="role">Rol</Label>
+                    <select id="role" v-model="form.role" class="border rounded p-2">
+                        <option value="client">Cliente</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                    <InputError :message="form.errors.role" />
                 </div>
 
                 <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
