@@ -12,12 +12,28 @@ const breadcrumbs: BreadcrumbItem[] = [
 	},
 ];
 
-const props = defineProps({
+defineProps({
     products: {
         type: Array,
         required: true,
     },
 });
+
+function addToCart(productId) {
+    fetch('/cart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+        },
+        body: JSON.stringify({ product_id: productId }),
+    })
+    .then(res => {
+        if(res.ok) alert('Producto agregado al carrito');
+        else alert('Error al agregar');
+    });
+}
 
 </script>
 
@@ -59,8 +75,15 @@ const props = defineProps({
                             </div>
                             <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mt-2">{{ product.description }}</p>
                             <div class="flex justify-between items-center mt-6">
-                                <p class="font-extrabold leading-tight text-gray-900 dark:text-white">{{ product.stock }} U.</p>
-                            </div>
+    <p class="font-extrabold leading-tight text-gray-900 dark:text-white">{{ product.stock }} U.</p>
+    <button
+        v-if="$page.props.auth.user && $page.props.auth.user.role === 'client'"
+        @click="addToCart(product.id)"
+        class="ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+    >
+        Agregar al carrito
+    </button>
+</div>
                         </div>
                     </div>
 				</div>
