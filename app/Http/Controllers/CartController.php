@@ -32,7 +32,7 @@ class CartController extends Controller
         CartItem::create([
             'user_id' => Auth::id(),
             'product_id' => $request->product_id,
-            'reserved' => false,
+            'reserved' => true,
         ]);
 
         return redirect()->route('cart.index');
