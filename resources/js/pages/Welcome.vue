@@ -57,7 +57,7 @@ const props = defineProps({
         <!-- Menú escritorio -->
         <div class="lg:flex lg:items-center lg:gap-2 hidden">
             <Link
-            v-if="$page.props.auth.user"
+            v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'"
             :href="route('products.index')"
             class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
         >

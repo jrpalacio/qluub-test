@@ -32,7 +32,7 @@ const mainNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'" :items="mainNavItems" />
         </SidebarContent>
 
         <SidebarFooter>

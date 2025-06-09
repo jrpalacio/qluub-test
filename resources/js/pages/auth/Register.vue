@@ -7,11 +7,13 @@ import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 import { usePage } from '@inertiajs/vue3';
 
+// En algunas rutas públicas (como registro), puede que no exista $page.props.auth ni user.
 const page = usePage();
-const currentUser = page.props.auth?.user || null;
+const currentUser = computed(() => page.props.auth && page.props.auth.user ? page.props.auth.user : null);
 
 const form = useForm({
     name: '',
@@ -73,7 +75,6 @@ const submit = () => {
                     />
                     <InputError :message="form.errors.password_confirmation" />
                 </div>
-
                 <!-- Solo mostrar el selector de rol si el usuario actual es admin -->
                 <div v-if="currentUser && currentUser.role === 'admin'" class="grid gap-2">
                     <Label for="role">Rol</Label>
@@ -83,7 +84,6 @@ const submit = () => {
                     </select>
                     <InputError :message="form.errors.role" />
                 </div>
-
                 <Button type="submit" class="mt-2 w-full" tabindex="5" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
                     Crear cuenta

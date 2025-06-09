@@ -45,6 +45,7 @@ const submit = () => {
 </script>
 
 <template>
+  <div v-if="$page.props.auth.user && $page.props.auth.user.role === 'admin'">
   <Head title="Editar producto" />
 
   <AppLayout :breadcrumbs="breadcrumbs">
@@ -116,4 +117,5 @@ const submit = () => {
 
 </section>
   </AppLayout>
+  </div>
 </template>

@@ -19,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \Inertia\Inertia::share([
+            'auth' => [
+                'user' => fn () => \Illuminate\Support\Facades\Auth::user(),
+            ],
+        ]);
     }
 }
