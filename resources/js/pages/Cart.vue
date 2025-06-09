@@ -1,25 +1,39 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { defineProps } from 'vue';
 
 const loading = ref(false);
 
+interface CartItem {
+  id: number;
+  product: {
+    id: number;
+    name: string;
+    description: string;
+  };
+}
 
 defineProps({
   cartItems: {
-    type: Array,
+    type: Array<CartItem>,
     required: true,
   },
 });
 
-
+const breadcrumbs: BreadcrumbItem[] = [
+  {
+      title: 'Carrito de compras',
+      href: '/dashboard',
+  },
+];
 </script>
 
 <template>
   <Head title="Carrito de compras" />
-  <AppLayout>
+  <AppLayout :breadcrumbs="breadcrumbs">
     <section class="py-8 antialiased md:py-12">
       <div class="mx-auto max-w-screen-md px-4 2xl:px-0">
         <h2 class="text-2xl font-bold mb-6">Carrito de compras</h2>
