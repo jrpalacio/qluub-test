@@ -17,7 +17,7 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('products', ProductController::class)->middleware(['auth', 'verified']);
+Route::resource('products', ProductController::class)->middleware(['auth', 'verified', 'admin']);
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

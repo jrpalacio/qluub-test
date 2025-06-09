@@ -10,7 +10,7 @@ class IsClient
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === 'client') {
+        if (auth()->check() && auth()->user()->isClient()) {
             return $next($request);
         }
         abort(403, 'No autorizado.');

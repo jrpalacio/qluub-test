@@ -139,6 +139,47 @@ const rightNavItems: NavItem[] = [
                         <Button variant="ghost" size="icon" class="group h-9 w-9 cursor-pointer">
                             <Search class="size-5 opacity-80 group-hover:opacity-100" />
                         </Button>
+                    </div>
+                    <template v-if="auth.user">
+                        <!-- Mostrar nombre y logout solo si es cliente -->
+                        <template v-if="auth.user.role === 'client'">
+                            <span class="mx-2 font-semibold text-neutral-800 dark:text-neutral-200">{{ auth.user.name }}</span>
+                            <Button variant="outline" size="sm">
+                                <Link method="post" :href="route('logout')">Cerrar sesión</Link>
+                            </Button>
+                        </template>
+                        <!-- Si no es cliente, mostrar el menú usual -->
+                        <template v-else>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger :as-child="true">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
+                                    >
+                                        <Avatar class="size-8 overflow-hidden rounded-full">
+                                            <AvatarImage v-if="auth.user.avatar" :src="auth.user.avatar" :alt="auth.user.name" />
+                                            <AvatarFallback class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white">
+                                                {{ getInitials(auth.user?.name) }}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" class="w-56">
+                                    <UserMenuContent :user="auth.user" />
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <!-- Si no está autenticado, mostrar iconos de login/registro -->
+                        <Button variant="outline" size="sm">
+                            <Link :href="route('login')">Iniciar sesión</Link>
+                        </Button>
+                        <Button variant="primary" size="sm">
+                            <Link :href="route('register')">Registrarse</Link>
+                        </Button>
+                    </template>
 
                         <div class="hidden space-x-1 lg:flex">
                             <template v-for="item in rightNavItems" :key="item.title">
