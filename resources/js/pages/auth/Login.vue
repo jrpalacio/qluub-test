@@ -20,8 +20,20 @@ const form = useForm({
     remember: false,
 });
 
+import { usePage, router } from '@inertiajs/vue3';
+
+const page = usePage();
+
 const submit = () => {
     form.post(route('login'), {
+        onSuccess: () => {
+            const user = page.props.auth?.user;
+            if (user?.role === 'admin') {
+                router.visit(route('products.index'));
+            } else if (user?.role === 'client') {
+                router.visit(route('home'));
+            }
+        },
         onFinish: () => form.reset('password'),
     });
 };
