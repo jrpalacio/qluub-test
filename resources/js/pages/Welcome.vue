@@ -2,6 +2,7 @@
 import { Head, Link, usePage } from '@inertiajs/vue3'
 import { ref, defineProps, computed } from 'vue'
 import { ShoppingCart, Menu, X, LogIn, UserPlus, LogOut } from 'lucide-vue-next'
+import { router } from '@inertiajs/vue3';
 
 const page = usePage()
 const showMobileMenu = ref(false)
@@ -24,6 +25,15 @@ const user = computed(() => page.props.auth?.user ?? null)
 const isAuthenticated = computed(() => !!user.value)
 const isAdmin = computed(() => user.value?.role === 'admin')
 const isClient = computed(() => user.value?.role === 'client')
+
+function addToCart(productId: number) {
+    router.post(route('cart.store'), { product_id: productId }, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Producto agregado al carrito');
+        },
+    });
+}
 </script>
 
 <template>
@@ -45,11 +55,11 @@ const isClient = computed(() => user.value?.role === 'client')
         <!-- Mobile Menu Button -->
         <div class="flex items-center gap-2">
             <template v-if="isAuthenticated && isClient">
-                <Link :href="route('dashboard')" class="text-white flex items-center gap-2">
+                <Link :href="route('cart.index')" class="text-white flex items-center gap-2" @click="addToCart(product.id)">
                     <ShoppingCart class="h-5 w-5" /> Carrito
                 </Link>
             </template>
-                <button
+            <button
                 class="h-9 w-9 flex items-center justify-center text-[#1b1b18] dark:text-white"
                 @click="showMobileMenu = !showMobileMenu"
                 aria-label="Abrir menú"
@@ -131,6 +141,12 @@ const isClient = computed(() => user.value?.role === 'client')
               <span class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
                 Stock: {{ product.stock }}
               </span>
+              <button
+                class="mt-4 px-4 py-2 bg-green-600 text-white rounded-full w-full hover:bg-green-700"
+                @click="addToCart(product.id)"
+              >
+                Agregar al carrito
+              </button>
             </div>
           </div>
         </div>
