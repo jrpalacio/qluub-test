@@ -21,7 +21,7 @@ Route::get('dashboard', function () {
 Route::resource('products', ProductController::class)->middleware(['auth', 'verified', 'admin']);
 
 // Carrito de compras
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified', 'client'])->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
