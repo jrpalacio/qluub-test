@@ -30,7 +30,7 @@ function addToCart(productId: number) {
     router.post(route('cart.store'), { product_id: productId }, {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Producto agregado al carrito');
+
         },
     });
 }
