@@ -51,6 +51,23 @@ function clearCart() {
         },
     });
 }
+
+function buyCart() {
+    loading.value = true;
+    router.post(route('cart.purchase'), {}, {
+        preserveScroll: true,
+        onSuccess: () => {
+            loading.value = false;
+            // Limpiar visualmente el carrito (emitir evento o recargar)
+            router.visit(route('cart.index'));
+        },
+        onError: (errors) => {
+            loading.value = false;
+            alert(errors.message || 'Ocurrió un error al comprar.');
+        },
+    });
+}
+
 </script>
 
 <template>
@@ -75,7 +92,7 @@ function clearCart() {
               </li>
             </ul>
             <div class="mt-6 flex justify-between">
-              <button class="px-4 py-2 bg-neutral-600 text-white rounded-full hover:bg-neutral-700 w-full font-semibold">Comprar</button>
+              <button class="px-4 py-2 bg-neutral-600 text-white rounded-full hover:bg-neutral-700 w-full font-semibold" @click="buyCart" :disabled="loading">Comprar</button>
             </div>
           </div>
           <div v-else class="text-gray-500 text-center py-8 h-[calc(100vh-20rem)] flex flex-col gap-4 items-center justify-center">

@@ -26,6 +26,7 @@ Route::middleware(['auth', 'verified', 'client'])->group(function () {
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/cart/purchase', [CartController::class, 'purchase'])->name('cart.purchase');
 });
 
 require __DIR__.'/settings.php';

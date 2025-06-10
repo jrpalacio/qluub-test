@@ -52,4 +52,34 @@ class CartController extends Controller
         CartItem::where('user_id', Auth::id())->delete();
         return redirect()->route('cart.index');
     }
+
+    // Comprar: descuenta stock y vacía el carrito
+    public function purchase()
+    {
+        $userId = auth()->id();
+
+        $cartItems = CartItem::with('product')
+            ->where('user_id', $userId)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return back()->withErrors('El carrito está vacío.');
+        }
+
+        foreach ($cartItems as $item) {
+            if ($item->product->stock < 1) {
+                return back()->withErrors("El producto {$item->product->name} no tiene stock suficiente.");
+            }
+        }
+
+        foreach ($cartItems as $item) {
+            $item->product->decrement('stock');
+            $item->update(['reserved' => true]);
+        }
+
+        CartItem::where('user_id', $userId)->delete();
+
+        return redirect()->route('cart.index')->with('success', 'Compra realizada con éxito.');
+    }
+
 }
