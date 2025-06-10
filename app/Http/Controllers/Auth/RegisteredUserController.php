@@ -48,6 +48,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
+        // Redirigir según el tipo de usuario
+        if ($user->role === 'client') {
+            return to_route('home');
+        }
         return to_route('products.index');
     }
 }
