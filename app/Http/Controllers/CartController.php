@@ -72,8 +72,21 @@ class CartController extends Controller
             }
         }
 
+        // Crear la compra
+        $purchase = \App\Models\Purchase::create([
+            'user_id' => $userId,
+        ]);
+
         foreach ($cartItems as $item) {
+            // Descontar stock
             $item->product->decrement('stock');
+            // Crear el ítem de compra
+            \App\Models\PurchaseItem::create([
+                'purchase_id' => $purchase->id,
+                'product_id' => $item->product->id,
+                'quantity' => 1, // Si tienes cantidad, cámbialo aquí
+                // 'price' => $item->product->price, // Si tienes campo price
+            ]);
             $item->update(['reserved' => true]);
         }
 
